@@ -20,11 +20,49 @@ byte colPins[COLS] = {28,26,24,22};
 
 Keypad kpd = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 
+int hour = 0;
+int hour_digit = 0;
+
+void newDigit(int digit){
+  // FIXME
+  hour = hour*pow(10, ++hour_digit)+digit;
+  Serial.println(digit);
+}
+
+void enter(){
+  Serial.print("Enter ");
+  Serial.println(hour);
+
+  hour = 0;
+  hour_digit = 1;
+  // TODO
+}
+
 void keypadEvent(KeypadEvent key){
-  Serial.println("aaaa");
   switch (kpd.getState()){
     case PRESSED:
-      Serial.println(key);
+      switch(key) {
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+          newDigit(key-'0');
+          break;
+        case 'A':
+        case 'B':
+        case 'C':
+        case 'D':
+        case '*':
+        case '#':
+          enter();
+          break;
+      }
       break;
   }
 }
@@ -39,17 +77,19 @@ void setup() {
   interrupts();
 }
 
+void led_delay(int index) {
+  int t = car_led_times[index];
+  for(int i = 0; i <= t; i += 10) {
+    kpd.getKey();
+    delay(i);
+  }
+}
+
 void loop() {
-  char key = kpd.getKey();
-  
-  //if (key != NO_KEY){
-  //  Serial.println(key);
-  //}
-  
   for(int i = 0; i < n; i++) {
     digitalWrite(car_leds[i], HIGH);
     digitalWrite(p_leds[i], HIGH);
-    delay(car_led_times[i]);
+    led_delay(i);
     digitalWrite(car_leds[i], LOW);
     digitalWrite(p_leds[i], LOW);
   }
