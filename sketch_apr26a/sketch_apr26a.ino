@@ -20,19 +20,21 @@ byte colPins[COLS] = {28,26,24,22};
 
 Keypad kpd = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 
-int hour = 0;
+int hour_buffer = 0;
+int hour = 1;
 
 void newDigit(int digit){
-  hour = hour*10+digit;
+  hour_buffer = hour_buffer*10+digit;
   Serial.println(digit);
 }
 
 void enter(){
   Serial.print("Enter ");
-  Serial.println(hour);
+  Serial.println(hour_buffer);
 
-  hour = 0;
-  // TODO
+  hour = hour_buffer%24;
+
+  hour_buffer = 0;
 }
 
 void keypadEvent(KeypadEvent key){
@@ -75,7 +77,8 @@ void setup() {
 }
 
 void led_delay(int index) {
-  int t = car_led_times[index];
+  // TODO: Get time from hour.
+  int t = car_led_times[index]*hour;
   for(int i = 0; i <= t; i += 10) {
     kpd.getKey();
     delay(i);
