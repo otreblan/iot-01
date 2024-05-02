@@ -76,9 +76,15 @@ void setup() {
   interrupts();
 }
 
-void led_delay(int index) {
+int get_delay(int index, int hour)
+{
   // TODO: Get time from hour.
-  int t = car_led_times[index]*hour;
+
+  return car_led_times[index];
+}
+
+void led_delay(int index) {
+  int t = get_delay(index, hour);
   for(int i = 0; i <= t; i += 10) {
     kpd.getKey();
     delay(i);
