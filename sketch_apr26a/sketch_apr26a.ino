@@ -21,11 +21,9 @@ byte colPins[COLS] = {28,26,24,22};
 Keypad kpd = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 
 int hour = 0;
-int hour_digit = 0;
 
 void newDigit(int digit){
-  // FIXME
-  hour = hour*pow(10, ++hour_digit)+digit;
+  hour = hour*10+digit;
   Serial.println(digit);
 }
 
@@ -34,7 +32,6 @@ void enter(){
   Serial.println(hour);
 
   hour = 0;
-  hour_digit = 1;
   // TODO
 }
 
