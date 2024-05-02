@@ -2,7 +2,11 @@
 
 const int n = 3;
 int car_leds[n] = {41, 43, 45};
-int car_led_times[n] = {10000, 2000, 7000};
+int car_led_times[3][n] = {
+  {1000, 200, 700},
+  {10000, 2000, 7000},
+  {2000, 400, 1400}
+};
 int p_leds[n] = {53, 53, 51};
 
 const byte ROWS = 4;
@@ -21,7 +25,7 @@ byte colPins[COLS] = {28,26,24,22};
 Keypad kpd = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 
 int hour_buffer = 0;
-int hour = 1;
+int hour = 12;
 
 void newDigit(int digit){
   hour_buffer = hour_buffer*10+digit;
@@ -78,9 +82,7 @@ void setup() {
 
 int get_delay(int index, int hour)
 {
-  // TODO: Get time from hour.
-
-  return car_led_times[index];
+  return car_led_times[hour/8][index];
 }
 
 void led_delay(int index) {
