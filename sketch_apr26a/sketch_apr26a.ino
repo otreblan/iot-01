@@ -85,9 +85,9 @@ int get_delay(int index, int hour)
 
 void led_delay(int index) {
   int t = get_delay(index, hour);
-  for(int i = 0; i <= t; i += 10) {
+  for(unsigned long start_time = millis(); millis() <= start_time+t;) {
     kpd.getKey();
-    delay(i);
+    delay(10);
   }
 }
 
